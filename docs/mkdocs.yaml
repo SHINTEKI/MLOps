@@ -1,5 +1,5 @@
-site_name: mlops_dtu_2024
-site_author: Xindi Wu
+site_name: mlops_dtu
+site_author: Xindi
 docs_dir: source
 
 theme:

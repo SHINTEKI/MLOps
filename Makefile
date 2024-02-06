@@ -8,7 +8,7 @@
 # GLOBALS                                                                       #
 #################################################################################
 
-PROJECT_NAME = mlops_dtu_2024
+PROJECT_NAME = mlops_dtu
 PYTHON_VERSION = 3.11
 PYTHON_INTERPRETER = python
 

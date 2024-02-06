@@ -1,4 +1,4 @@
 ## Documentation
 
-Documentation for mlops_dtu_2024
+Documentation for mlops_dtu
 

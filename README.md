@@ -1,6 +1,6 @@
-# mlops_dtu_2024
+# mlops_dtu
 
-course materials for mlops at DTU
+course materials for mlops at dtu
 
 ## Project structure
 
@@ -37,7 +37,7 @@ The directory structure of the project looks like this:
 │
 ├── tests                <- Test files
 │
-├── mlops_dtu_2024  <- Source code for use in this project.
+├── mlops_dtu  <- Source code for use in this project.
 │   │
 │   ├── __init__.py      <- Makes folder a Python module
 │   │

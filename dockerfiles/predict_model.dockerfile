@@ -7,11 +7,11 @@ RUN apt update && \
 
 COPY requirements.txt requirements.txt
 COPY pyproject.toml pyproject.toml
-COPY mlops_dtu_2024/ mlops_dtu_2024/
+COPY mlops_dtu/ mlops_dtu/
 COPY data/ data/
 
 WORKDIR /
 RUN pip install -r requirements.txt --no-cache-dir
 RUN pip install . --no-deps --no-cache-dir
 
-ENTRYPOINT ["python", "-u", "mlops_dtu_2024/predict_model.py"]
+ENTRYPOINT ["python", "-u", "mlops_dtu/predict_model.py"]

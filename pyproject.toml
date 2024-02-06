@@ -3,11 +3,11 @@ requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "mlops_dtu_2024"
+name = "mlops_dtu"
 version = "0.0.1"
-description = "course materials for mlops at DTU"
+description = "course materials for mlops at dtu"
 authors = [
-  { name = "Xindi Wu", email = "your@email.com" },
+  { name = "Xindi", email = "your@email.com" },
 ]
 
 readme = "README.md"
@@ -15,11 +15,7 @@ requires-python = ">=3.11"
 dynamic = ["dependencies", "optional-dependencies"]
 
 [tool.setuptools]
-packages = ["mlops_dtu_2024"]
-
-[tool.setuptools_scm]
-version_scheme = "post-release"
-local_scheme = "node-and-date"
+packages = ["mlops_dtu"]
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
