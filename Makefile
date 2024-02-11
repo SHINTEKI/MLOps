@@ -9,8 +9,8 @@
 #################################################################################
 
 PROJECT_NAME = mlops_dtu
-PYTHON_VERSION = 3.11
-PYTHON_INTERPRETER = python
+PYTHON_VERSION = 3.10.6
+PYTHON_INTERPRETER = python3
 
 #################################################################################
 # COMMANDS                                                                      #
@@ -35,14 +35,17 @@ clean:
 	find . -type f -name "*.py[co]" -delete
 	find . -type d -name "__pycache__" -delete
 
-
 #################################################################################
 # PROJECT RULES                                                                 #
 #################################################################################
 
 ## Process raw data into processed data
 data:
-	python $(PROJECT_NAME)/data/make_dataset.py
+	python3 $(PROJECT_NAME)/data/make_dataset.py
+
+## train models
+train:
+	python3 $(PROJECT_NAME)/train_model.py train
 
 #################################################################################
 # Documentation RULES                                                           #

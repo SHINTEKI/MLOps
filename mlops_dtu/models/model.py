@@ -1,19 +1,33 @@
 import torch
+import torch.nn as nn # All neural network modules, nn.Linear, nn.Conv2d, BatchNorm, Loss functions
+import torch.optim as optim # For all Optimization algorithms, SGD, Adam, etc.
+import torch.nn.functional as F # All functions that don't have any parameters
+from torch.utils.data import DataLoader # Gives easier dataset managment and creates mini batches
+import torchvision.datasets as datasets # Has standard datasets we can import in a nice and easy way
+import torchvision.transforms as transforms # Transformations we can perform on our dataset
+from torch.nn.parameter import Parameter
 
-class MyNeuralNet(torch.nn.Module):
+import pandas as pd 
+import numpy as np
+
+class Model(nn.Module):
     """ Basic neural network class. 
     
     Args:
         in_features: number of input features
-        out_features: number of output features
+        out_features: number of output features 
     
     """
-    def __init__(self, in_features: int, out_features: int) -> None:
-        self.l1 = torch.nn.Linear(in_features, 500)
-        self.l2 = torch.nn.Linear(500, out_features)
-        self.r = torch.nn.ReLU()
+    def __init__(self, in_features=784, out_features=10):
+        super().__init__()
+        self.fc1 = nn.Linear(in_features, 256)
+        self.fc2 = nn.Linear(256, 128)
+        self.fc3 = nn.Linear(128, 64)
+        self.fc4 = nn.Linear(64, out_features)
+        self.ReLU = nn.ReLU()
+        self.dropout = nn.Dropout(p=0.5)
     
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(self, x):
         """Forward pass of the model.
         
         Args:
@@ -23,4 +37,9 @@ class MyNeuralNet(torch.nn.Module):
             Output tensor with shape [N,out_features]
 
         """
-        return self.l2(self.r(self.l1(x)))
+        x = x.view(x.shape[0],-1)
+        x = self.dropout(self.ReLU(self.fc1(x)))
+        x = self.dropout(self.ReLU(self.fc2(x)))
+        x = self.dropout(self.ReLU(self.fc3(x)))
+        x = self.fc4(x)      
+        return x

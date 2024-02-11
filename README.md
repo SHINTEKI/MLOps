@@ -61,3 +61,24 @@ The directory structure of the project looks like this:
 Created using [mlops_template](https://github.com/SkafteNicki/mlops_template),
 a [cookiecutter template](https://github.com/cookiecutter/cookiecutter) for getting
 started with Machine Learning Operations (MLOps).
+
+## Functions
+
+# create normalized dataset
+mlops_dtu/data/make_dataset.py 
+
+# train model
+mlops_dtu/train_model.py
+
+# predict model 
+mlops_dtu/predict_model.py
+
+# visualize 
+mlops_dtu/predict_model.py
+
+
+torch==1.13.0
+click==8.1.3
+matplotlib==3.6.3
+numpy==1.23.4
+torchvision==0.14.0
