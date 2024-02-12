@@ -1,29 +1,18 @@
-import argparse
-from pkgutil import get_loader
-import sys
-
 import os
 
-import torch
 import click
-import matplotlib.pyplot as plt  
+import matplotlib.pyplot as plt
+import numpy as np
+import torch
+
+# from function import accuracy
+import torch.nn as nn
+import torch.optim as optim
+import torch.utils.data as Data
+from torch.utils.data import DataLoader
 
 from mlops_dtu.models.model import Model
-# from function import accuracy
 
-import torch
-import torch.nn as nn 
-import torch.optim as optim 
-import torch.nn.functional as F 
-from torch.utils.data import DataLoader 
-import torchvision.datasets as datasets 
-import torchvision.transforms as transforms 
-from torch.nn.parameter import Parameter
-import torch.utils.data as Data
-
-import pandas as pd 
-import numpy as np
-import matplotlib.pyplot as plt
 
 @click.group()
 def cli():
@@ -31,7 +20,7 @@ def cli():
 
 
 @click.command()
-@click.option("--lr", default=1e-3, help='learning rate to use for training')
+@click.option("--lr", default=1e-3, help="learning rate to use for training")
 def train(lr):
     print("Training day and night")
     print(lr)
@@ -47,49 +36,48 @@ def train(lr):
     # make model
     model = Model()
     # train_loader, _ = corrupted_mnist()
-    criterion = nn.CrossEntropyLoss() 
+    criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=lr)
     num_epochs = 10
     train_losses = []
     state_dict = []
-    
+
     for epoch in range(num_epochs):
-        
         model.train()
         running_loss = 0
         for images, labels in train_loader:
-            
             # forward propagation
             scores = model(images)
             loss = criterion(scores, labels)
-            
+
             # zero previous gradients
-            optimizer.zero_grad() 
-            
+            optimizer.zero_grad()
+
             # back-propagation
             loss.backward()
 
             # gradient descent or adam step
             optimizer.step()
-            
+
             running_loss += loss.item()
-        print("epoch:",epoch," loss:",running_loss)
+        print("epoch:", epoch, " loss:", running_loss)
         train_losses.append(running_loss)
         state_dict.append(model.state_dict())
-    x=np.arange(0,num_epochs)
-    plt.plot(x,train_losses);
+    x = np.arange(0, num_epochs)
+    plt.plot(x, train_losses)
     ind = train_losses.index(min(train_losses))
     op_model = state_dict[ind]
 
     # save model to pth file
     save_dir = "models/trained"
     os.makedirs(save_dir, exist_ok=True)
-    torch.save(op_model, os.path.join(save_dir, 'checkpoint.pth'))
+    torch.save(op_model, os.path.join(save_dir, "checkpoint.pth"))
 
     # save the graph to reports
     save_dir = "reports/figures"
-    os.makedirs(save_dir, exist_ok=True)  
-    plt.savefig(os.path.join(save_dir, 'train_loss.png'))
+    os.makedirs(save_dir, exist_ok=True)
+    plt.savefig(os.path.join(save_dir, "train_loss.png"))
+
 
 @click.command()
 @click.argument("model_checkpoint")
@@ -104,13 +92,12 @@ def evaluate(model_checkpoint):
     model.load_state_dict(state_dict)
     with torch.no_grad():
         model.eval()
-        acc = 0
+        # acc = 0
         # for batch_idx, (images, labels) in enumerate(get_loader):
-            # score = model(images)
-            # accuracy_score = accuracy(score, labels)
-            # acc += accuracy_score
-        # print(acc.item()/(batch_idx+1)) 
-
+        # score = model(images)
+        # accuracy_score = accuracy(score, labels)
+        # acc += accuracy_score
+        # print(acc.item()/(batch_idx+1))
 
 
 cli.add_command(train)
