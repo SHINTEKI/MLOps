@@ -21,7 +21,8 @@ def cli():
 
 @click.command()
 @click.option("--lr", default=1e-3, help="learning rate to use for training")
-def train(lr):
+@click.option("--epoch", default=10, help="epochs for training")
+def train(lr, epoch):
     print("Training day and night")
     print(lr)
 
@@ -38,7 +39,7 @@ def train(lr):
     # train_loader, _ = corrupted_mnist()
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=lr)
-    num_epochs = 10
+    num_epochs = epoch
     train_losses = []
     state_dict = []
 
