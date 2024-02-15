@@ -1,5 +1,11 @@
 import os
+folders = [folder for folder in os.listdir() if os.path.isdir(folder)]
 
+# 打印文件夹列表
+print("当前目录下的文件夹：")
+for folder in folders:
+    print(folder)
+    
 import click
 import matplotlib.pyplot as plt
 import numpy as np
