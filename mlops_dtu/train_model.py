@@ -1,15 +1,9 @@
-import os
-folders = [folder for folder in os.listdir() if os.path.isdir(folder)]
-
-# 打印文件夹列表
-print("当前目录下的文件夹：")
-for folder in folders:
-    print(folder)
-    
+import os  
 import click
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
+import wandb
 
 # from function import accuracy
 import torch.nn as nn
@@ -19,6 +13,7 @@ from torch.utils.data import DataLoader
 
 from mlops_dtu.models.model import Model
 
+wandb.init(project="MLOps", entity="wuxindi1127")
 
 @click.group()
 def cli():
@@ -42,6 +37,7 @@ def train(lr, epoch):
 
     # make model
     model = Model()
+    wandb.watch(model, log_freq=100)
     # train_loader, _ = corrupted_mnist()
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=lr)
@@ -52,7 +48,7 @@ def train(lr, epoch):
     for epoch in range(num_epochs):
         model.train()
         running_loss = 0
-        for images, labels in train_loader:
+        for batch_idx, (images, labels) in enumerate(train_loader):
             # forward propagation
             scores = model(images)
             loss = criterion(scores, labels)
@@ -67,9 +63,30 @@ def train(lr, epoch):
             optimizer.step()
 
             running_loss += loss.item()
+            if batch_idx % 100 == 0:
+                wandb.log({"loss": loss.item()})
+
+            _, pred = torch.max(scores.data, 1)
         print("epoch:", epoch, " loss:", running_loss)
         train_losses.append(running_loss)
         state_dict.append(model.state_dict())
+    
+    # log 
+    # wandb.log({"examples": [wandb.Image(im) for im in images]})
+    
+    my_table = wandb.Table(columns=["image_id", "image", "label", "prediction"])
+    
+    for img_id, img in enumerate(images):
+        true_label = labels[img_id]
+        guess_label = pred[img_id]
+        my_table.add_data(img_id, wandb.Image(img),true_label, guess_label)
+    wandb.log({"mnist_predictions": my_table})
+
+    # my_table.add_column("image", wandb.Image(images.tolist()))
+    # my_table.add_column("label", labels.tolist())
+    # my_table.add_column("class_prediction", pred.tolist())
+    # wandb.log({"mnist_predictions": my_table})
+    
     x = np.arange(0, num_epochs)
     plt.plot(x, train_losses)
     ind = train_losses.index(min(train_losses))
